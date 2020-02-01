@@ -27,3 +27,13 @@ t1 = torch.tensor([
 
 print(t1.sum(dim=0)) #across arrays
 print(t1.sum(dim=1))    #across elements
+
+#argmax method
+t2 = torch.tensor([
+    [4,5,3],
+    [6,5,2],
+    [7,9,7]
+], dtype=torch.float32)
+
+print(t2.max())
+print(t2.argmax())
