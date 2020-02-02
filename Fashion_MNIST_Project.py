@@ -51,3 +51,10 @@ images, labels = batch
 #batch shape
 print(images.shape)
 print(labels.shape)
+
+#batch visualisation
+grid = torchvision.utils.make_grid(images, nrow=10)
+plt.figure(figsize=(15,15))
+plt.imshow(np.transpose(grid, (1,2,0)))
+print('labels: ', labels)
+plt.show()
