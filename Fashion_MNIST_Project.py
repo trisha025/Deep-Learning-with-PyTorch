@@ -20,8 +20,8 @@ train_set = torchvision.datasets.FashionMNIST(
 )
 
 #data loading into an object
-train_loader = torch.utils.data.DataLoader(
-    train_set, batch_size=100)
+#train_loader = torch.utils.data.DataLoader(
+#    train_set, batch_size=100)
 
 print("Total number of traning images: ", len(train_set))
 
@@ -30,35 +30,35 @@ print("Training labels: ", train_set.targets)
 print("Number of images in each class: ", train_set.targets.bincount())
 
 #to access an individual sample
-sample = next(iter(train_set))
-print(len(sample)) # =2 (i) image (ii) label
+#sample = next(iter(train_set))
+#print(len(sample)) # =2 (i) image (ii) label
 
-print(type(sample))
-image, label = sample
+#print(type(sample))
+#image, label = sample
 
 #sample shape
-print(image.shape)
+#print(image.shape)
 
-plt.imshow(image.squeeze(), cmap = 'gray')
-print('label: ', label)
+#plt.imshow(image.squeeze(), cmap = 'gray')
+#print('label: ', label)
 #plt.show()
 
 #to access a batch
-batch = next(iter(train_loader))
+#batch = next(iter(train_loader))
 
-print(len(batch))
-print(type(batch))
-images, labels = batch
+#print(len(batch))
+#print(type(batch))
+#images, labels = batch
 
 #batch shape
-print(images.shape)
-print(labels.shape)
+#print(images.shape)
+#print(labels.shape)
 
 #batch visualisation
-grid = torchvision.utils.make_grid(images, nrow=10)
-plt.figure(figsize=(15,15))
-plt.imshow(np.transpose(grid, (1,2,0)))
-print('labels: ', labels)
+#grid = torchvision.utils.make_grid(images, nrow=10)
+#plt.figure(figsize=(15,15))
+#plt.imshow(np.transpose(grid, (1,2,0)))
+#print('labels: ', labels)
 #plt.show()
 
 #NN Class
@@ -101,7 +101,7 @@ class Network(nn.Module):
 
         return t
 
-torch.set_grad_enabled(False)
+#torch.set_grad_enabled(False)
 
 network = Network()
 #print(network)
@@ -111,16 +111,23 @@ data_loader = torch.utils.data.DataLoader(
     batch_size=10
 )
 
-batch = next(iter(data_loader))
-images, labels = batch
+#batch = next(iter(data_loader))
+#images, labels = batch
 
-print(image.shape)
-print(labels.shape)
+#print(image.shape)
+#print(labels.shape)
 
-preds = network(images)
-print(preds.shape)
-print(preds)
-print(preds.argmax(dim=1))
-print(labels)
-print(preds.argmax(dim=1).eq(labels))
-print(preds.argmax(dim=1).eq(labels).sum())
+#preds = network(images)
+#print(preds.shape)
+#print(preds)
+#print(preds.argmax(dim=1))
+#print(labels)
+#print(preds.argmax(dim=1).eq(labels))
+#print(preds.argmax(dim=1).eq(labels).sum())
+
+sample = next(iter(train_set))
+image, label = sample
+
+output = network(image.unsqueeze(0))
+print(output)
+
