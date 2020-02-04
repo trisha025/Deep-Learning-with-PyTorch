@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 import torchvision
 import torchvision.transforms as transforms
 import numpy as np
@@ -72,8 +73,54 @@ class Network(nn.Module):
         self.out = nn.Linear(in_features = 60, out_features=10)
             
     def forward(self, t):
-        #
+        # (1) input layer
+        t=t
+
+        #(2) Conv layer
+        t= self.conv1(t)
+        t = F.relu(t)
+        t = F.max_pool2d(t, kernel_size=2, stride=2)
+
+        # (3) Conv Layer
+        t = self.conv2(t)
+        t = F.relu(t)
+        t = F.max_pool2d(t, kernel_size= 2, stride=2)
+
+        # (4) Linear layer
+        t = t.reshape(-1, 12*4*4)
+        t = self.fc1(t)
+        t = F.relu(t)
+
+        # (5) Linear Layer
+        t = self.fc2(t)
+        t = F.relu(t)
+
+        # (6) output layer
+        t = self.out(t)
+        #t = F.softmax(t, dim=1)
+
         return t
 
+torch.set_grad_enabled(False)
+
 network = Network()
-print(network)
+#print(network)
+
+data_loader = torch.utils.data.DataLoader(
+    train_set,
+    batch_size=10
+)
+
+batch = next(iter(data_loader))
+images, labels = batch
+
+print(image.shape)
+print(labels.shape)
+
+preds = network(images)
+print(preds.shape)
+print(preds)
+print(preds.argmax(dim=1))
+print(labels)
+print(preds.argmax(dim=1).eq(labels))
+print(preds.argmax(dim=1).eq(labels).sum())
