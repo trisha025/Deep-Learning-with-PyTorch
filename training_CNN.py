@@ -34,7 +34,7 @@ class Network(nn.Module):
         # (3) Conv Layer
         t = self.conv2(t)
         t = F.relu(t)
-        t = max_pool2d(t, kernel_size=2, stride=2)
+        t = F.max_pool2d(t, kernel_size=2, stride=2)
 
         # (4) Linear Layer
         t = t.reshape(-1, 12*4*4)
@@ -49,6 +49,8 @@ class Network(nn.Module):
         t = self.out(t)
         #t = F.softmax(t, dim=1)
 
+        return t
+
 #training set
 train_set = torchvision.datasets.FashionMNIST(
     root= './data/FashionMNIST',
@@ -59,8 +61,34 @@ train_set = torchvision.datasets.FashionMNIST(
     ])
 )
 
+#training with a single batch
 network = Network()
 
 train_loader = torch.utils.data.DataLoader(train_set, batch_size=100)
 batch = next(iter(train_loader))
 images, labels = batch
+
+    #calculating the loss
+preds = network(images)
+loss = F.cross_entropy(preds, labels)
+print(loss.item())
+
+    #calculating the gradient
+print(network.conv1.weight.grad)
+
+loss.backward()
+print(network.conv1.weight.grad.shape)
+
+    #update weights
+optimizer = optim.Adam(network.parameters(), lr=0.01)
+print('loss 1: ',loss.item())
+#print(get_num_correct(preds, labels))
+
+optimizer.step()
+
+preds = network(images)
+loss = F.cross_entropy(preds, labels)
+
+print('loss2: ',loss.item())
+#print(get_num_correct(preds, labels))
+
